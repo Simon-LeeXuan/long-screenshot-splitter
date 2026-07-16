@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>长截图智能分割工具 - 免费在线长截图分割工具 | Long Screenshot Splitter</title>
+  <meta name="description" content="长截图智能分割工具：免费在线将超长截图按空白区域智能切分，支持手动调整、PNG/JPG/WEBP 打包下载和合并 PDF。所有图片仅在本地浏览器处理。" />
+  <meta name="keywords" content="长截图分割,长图切分,长截图智能分割工具,免费在线图片分割,Long Screenshot Splitter" />
+  <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://simon-leexuan.github.io/long-screenshot-splitter/" />
+  <meta property="og:title" content="长截图智能分割工具 - 免费在线长截图分割工具" />
+  <meta property="og:description" content="免费在线智能切分长截图，支持手动调整、图片打包下载和合并 PDF；所有处理均在本地浏览器完成。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://simon-leexuan.github.io/long-screenshot-splitter/" />
+  <style>
+    :root { --ink:#17233b; --muted:#61708c; --line:#dde5f1; --blue:#2367f2; --blue-soft:#eaf1ff; --panel:#ffffff; --bg:#f4f7fb; --good:#138a5b; --warn:#b66b00; --shadow:0 14px 40px rgba(40,67,112,.11); }
+    * { box-sizing:border-box; }
+    body { display:flex; flex-direction:column; min-height:100vh; margin:0; color:var(--ink); background:linear-gradient(145deg,#f6f9ff 0%,#f5f8fc 50%,#edf4ff 100%); font-family:"Microsoft YaHei UI","Microsoft YaHei",system-ui,sans-serif; }
+    button,input { font:inherit; }
+    .shell { flex:1; width:min(1240px,calc(100% - 32px)); margin:0 auto; }
+    header { padding:42px 0 25px; }
+    .brand { display:flex; align-items:center; gap:12px; font-size:15px; color:var(--blue); font-weight:800; letter-spacing:.02em; }
+    .brand-mark { width:32px; height:32px; border-radius:10px; color:#fff; background:linear-gradient(135deg,#3579ff,#1456d5); display:grid; place-items:center; box-shadow:0 8px 16px rgba(35,103,242,.25); }
+    h1 { margin:20px 0 10px; font-size:clamp(28px,4vw,44px); letter-spacing:-.04em; }
+    .lead { max-width:none; color:var(--muted); line-height:1.8; margin:0; white-space:nowrap; }
+    .notice { display:flex; gap:11px; align-items:flex-start; padding:15px 18px; margin:26px 0; color:#35517f; background:#eef5ff; border:1px solid #d5e4fb; border-radius:15px; font-size:14px; line-height:1.65; }
+    .notice strong { color:#1e4d9a; }
+    .privacy-highlight { display:flex; gap:12px; align-items:center; padding:16px 20px; margin:-8px 0 26px; color:#704800; background:#fff4c9; border:1px solid #f2ca54; border-radius:15px; box-shadow:0 8px 20px rgba(186,132,0,.12); }
+    .privacy-highlight .highlight-icon { width:30px; height:30px; flex:0 0 30px; display:grid; place-items:center; border-radius:50%; color:#fff; background:#e09a00; font-size:16px; }
+    .privacy-highlight strong { display:block; margin-bottom:2px; color:#8c5700; font-size:15px; }
+    .privacy-highlight span { font-size:14px; font-weight:700; }
+    .panel { background:rgba(255,255,255,.94); border:1px solid rgba(214,225,240,.94); border-radius:20px; box-shadow:var(--shadow); }
+    .upload { padding:30px; border:2px dashed #aec7ef; text-align:center; transition:.2s; cursor:pointer; }
+    .upload.drag { border-color:var(--blue); background:#f5f9ff; transform:translateY(-2px); }
+    .upload-icon { width:55px; height:55px; display:grid; place-items:center; margin:0 auto 13px; border-radius:18px; background:var(--blue-soft); color:var(--blue); font-size:26px; }
+    .upload h2 { margin:0 0 7px; font-size:20px; }
+    .upload p { color:var(--muted); margin:0 0 18px; font-size:14px; }
+    input[type=file] { display:none; }
+    .btn { border:0; border-radius:11px; padding:11px 16px; color:#fff; background:var(--blue); cursor:pointer; font-weight:750; transition:.18s; box-shadow:0 8px 18px rgba(35,103,242,.2); }
+    .btn:hover:not(:disabled) { transform:translateY(-1px); filter:brightness(1.04); }
+    .btn:disabled { cursor:not-allowed; opacity:.5; box-shadow:none; }
+    .btn-secondary { color:#315078; background:#edf3fb; box-shadow:none; }
+    .btn-green { background:#0e9561; box-shadow:0 8px 18px rgba(14,149,97,.18); }
+    .workspace { display:none; margin:25px 0 48px; }
+    .workspace.ready { display:block; }
+    .meta { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; padding:18px 20px; margin-bottom:16px; }
+    .meta-item { padding:9px 12px; border-radius:12px; background:#f7f9fd; }
+    .meta-label { display:block; color:var(--muted); font-size:12px; margin-bottom:4px; }
+    .meta-value { font-weight:800; word-break:break-all; }
+    .tools { padding:20px; margin-bottom:16px; }
+    .tools h2,.editor-title h2,.modules-head h2 { margin:0; font-size:18px; }
+    .tool-header { margin-bottom:14px; }
+    .tool-row { display:flex; flex-wrap:wrap; align-items:end; gap:12px; }
+    .cut-mode-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .cut-mode { min-width:0; padding:15px; border:1px solid #dce6f5; border-radius:14px; background:#f9fbff; }
+    .cut-mode h3 { display:flex; align-items:center; gap:7px; margin:0 0 12px; color:#2c4d7d; font-size:14px; }
+    .recommend-tag { padding:2px 7px; border-radius:999px; color:#08794d; background:#dff7ea; font-size:11px; font-weight:900; }
+    .field { display:grid; gap:6px; color:var(--muted); font-size:12px; font-weight:700; }
+    .field input { width:144px; padding:10px 11px; border:1px solid #cfd9e8; border-radius:10px; color:var(--ink); background:#fff; }
+    .field input:focus { outline:3px solid #dce9ff; border-color:#82a8ee; }
+    .status { min-height:20px; margin:6px 0 0; color:var(--good); font-size:13px; font-weight:800; }
+    .editor { overflow:hidden; margin-bottom:18px; }
+    .editor-title { display:flex; justify-content:space-between; align-items:center; gap:14px; padding:18px 20px; border-bottom:1px solid var(--line); }
+    .editor-title span { color:var(--muted); font-size:13px; }
+    .zoom-controls { display:flex; align-items:center; gap:7px; white-space:nowrap; color:#4c6285; font-size:12px; font-weight:800; }
+    .zoom-controls input[type=range] { width:112px; accent-color:var(--blue); }
+    .zoom-controls input[type=number] { width:52px; padding:6px 4px; border:1px solid #cfd9e8; border-radius:7px; text-align:center; }
+    .zoom-controls button { padding:6px 9px; border:1px solid #d7e3f7; border-radius:7px; color:#315078; background:#edf3fb; cursor:pointer; font-size:12px; font-weight:800; }
+    .editor-viewport { display:flex; justify-content:center; align-items:flex-start; max-height:680px; overflow:auto; background:repeating-conic-gradient(#fbfcfe 0% 25%,#f4f7fb 0% 50%) 50% / 22px 22px; }
+    #editorCanvas { display:block; flex:0 0 auto; max-width:none; cursor:crosshair; }
+    .cut-list { display:flex; flex-wrap:wrap; gap:8px; padding:14px 18px; border-top:1px solid var(--line); }
+    .cut-chip { display:flex; align-items:center; gap:7px; padding:5px 8px 5px 10px; color:#315078; background:#edf4ff; border:1px solid #d8e6ff; border-radius:999px; font-size:12px; font-weight:800; }
+    .cut-chip input { width:72px; padding:4px 3px; border:0; border-bottom:1px solid #9ebcf1; color:#173d7c; background:transparent; text-align:center; font-weight:800; }
+    .cut-chip button { padding:0; border:0; color:#6b85a8; background:transparent; cursor:pointer; font-size:17px; line-height:1; }
+    .modules { padding:20px; margin-bottom:32px; }
+    .modules-head { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px; margin-bottom:16px; }
+    .modules-head p { margin:4px 0 0; color:var(--muted); font-size:13px; }
+    .export-actions { display:flex; flex-wrap:wrap; gap:8px; }
+    .export-format { display:flex; align-items:center; gap:7px; padding:0 10px; border:1px solid #d5e0f0; border-radius:11px; color:#4b6287; background:#f7faff; font-size:12px; font-weight:800; }
+    .export-format select { padding:8px 2px; border:0; color:#26446e; background:transparent; font-weight:800; }
+    .module-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:14px; }
+    .module-card { overflow:hidden; border:1px solid var(--line); border-radius:14px; background:#fff; }
+    .module-preview { display:block; width:100%; max-height:230px; object-fit:contain; background:repeating-conic-gradient(#fbfcfe 0% 25%,#f4f7fb 0% 50%) 50% / 16px 16px; }
+    .module-info { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:12px; }
+    .module-info strong { display:block; font-size:14px; }
+    .module-info small { display:block; margin-top:3px; color:var(--muted); font-size:12px; }
+    .module-info .btn { padding:8px 10px; font-size:12px; white-space:nowrap; }
+    footer { padding:0 0 35px; color:#71809a; text-align:center; font-size:12px; }
+    @media (max-width:700px) { .shell{width:min(100% - 20px,1240px)} header{padding-top:26px}.lead{white-space:normal}.upload,.tools,.modules{padding:18px}.meta,.cut-mode-grid{grid-template-columns:1fr}.editor-title{align-items:flex-start;gap:10px;flex-direction:column}.tool-row{align-items:stretch}.field input{width:100%}.field{flex:1;min-width:130px}.btn{flex:1}.modules-head{align-items:flex-start;flex-direction:column}.zoom-controls{flex-wrap:wrap;white-space:normal}.export-actions{width:100%}.export-format{flex:1;justify-content:space-between} }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="brand"><span class="brand-mark">✂</span> 长截图智能分割工具</div>
+      <h1>长截图智能分割工具 - 免费在线长截图分割工具</h1>
+      <p class="lead">把巨长截图拆成适合上传的多个模块。图片只在本机浏览器处理；每个模块始终保留原始宽度和像素，不上传、不压缩。</p>
+    </header>
+
+    <div class="notice"><span>🔒</span><div><strong>隐私与清晰度：</strong>所有处理都在当前电脑完成。可下载单张 PNG、完整 PNG 包或合并 PDF；模块始终保持原图宽度与像素，默认在相邻模块间保留 24 像素重叠，防止边界遗漏。</div></div>
+    <div class="privacy-highlight"><span class="highlight-icon">✓</span><div><strong>完全离线处理</strong><span>本地离线运行 · 不上传图片 · 支持单张 PNG、PNG 包与合并 PDF</span></div></div>
+
+    <section class="upload panel" id="dropZone" tabindex="0" role="button" aria-label="选择要分割的图片">
+      <div class="upload-icon">↑</div>
+      <h2>导入一张长图</h2>
+      <p>点击选择或直接拖入 PNG、JPG、WEBP 等图片</p>
+      <label class="btn" for="fileInput">选择图片</label>
+      <input id="fileInput" type="file" accept="image/*" />
+    </section>
+
+    <section class="workspace" id="workspace">
+      <div class="meta panel" id="imageMeta"></div>
+      <section class="tools panel">
+        <div class="tool-header"><h2>分割设置</h2><div class="status" id="status" aria-live="polite"></div></div>
+        <div class="cut-mode-grid">
+          <section class="cut-mode"><h3>自动切分 <span class="recommend-tag">推荐</span></h3><div class="tool-row"><label class="field">目标模块高度（像素）<input id="targetHeight" type="number" min="400" step="50" value="2000" /></label><label class="field">模块重叠（像素）<input id="overlap" type="number" min="0" max="300" step="1" value="24" /></label><button class="btn" id="autoCut">自动识别空白处并切分</button></div></section>
+          <section class="cut-mode"><h3>手动切分</h3><div class="tool-row"><label class="field">新增切点 Y 坐标<input id="manualY" type="number" min="1" step="1" placeholder="例如 1800" /></label><button class="btn btn-secondary" id="addCut">添加切点</button><button class="btn btn-secondary" id="clearCuts">清空切点</button></div></section>
+        </div>
+      </section>
+
+      <section class="editor panel">
+        <div class="editor-title"><div><h2>切分编辑器</h2><span>点击预览图任意位置即可新增切点；拖动蓝线可精确调整。</span></div><div class="zoom-controls"><span>预览缩放</span><input id="previewZoom" type="range" min="10" max="100" step="1" /><input id="previewZoomValue" type="number" min="10" max="100" step="1" aria-label="预览缩放百分比" /><span>%</span><button id="resetZoom" type="button">恢复自适应</button><span id="editorHint"></span></div></div>
+        <div class="editor-viewport" id="editorViewport"><canvas id="editorCanvas"></canvas></div>
+        <div class="cut-list" id="cutList"></div>
+      </section>
+
+      <section class="modules panel">
+        <div class="modules-head"><div><h2>导出与下载</h2><p id="moduleSummary">请先设置切点。</p></div><div class="export-actions"><label class="export-format">图片包格式<select id="exportFormat"><option value="png">PNG（无损）</option><option value="jpeg">JPG（高质量）</option><option value="webp">WEBP（高质量）</option></select></label><button class="btn btn-green" id="downloadZip" disabled>下载图片包（ZIP）</button><button class="btn" id="downloadPdf" disabled>下载合并 PDF</button></div></div>
+        <div class="module-grid" id="moduleGrid"></div>
+      </section>
+    </section>
+  </main>
+  <footer>长截图智能分割工具 · Long Screenshot Splitter</footer>
+
+  <script>
+  (() => {
+    const $ = (id) => document.getElementById(id);
+    const state = { image: null, file: null, cuts: [], dragging: -1, previewScale: 1, previewZoom: null, analysis: null };
+    const fileInput = $('fileInput'), dropZone = $('dropZone'), workspace = $('workspace');
+    const canvas = $('editorCanvas'), editorCtx = canvas.getContext('2d', { alpha: false });
+    const status = $('status'), targetInput = $('targetHeight'), overlapInput = $('overlap'), previewZoom = $('previewZoom'), previewZoomValue = $('previewZoomValue'), exportFormat = $('exportFormat');
+
+    function setStatus(text, type = 'good') { status.textContent = text; status.style.color = type === 'warn' ? 'var(--warn)' : 'var(--good)'; }
+    function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+    function sourceBaseName() { return (state.file?.name || '长图').replace(/\.[^.]+$/, '').replace(/[<>:"/\\|?*]+/g, '_'); }
+    function cutOverlap() { return clamp(Math.round(Number(overlapInput.value) || 0), 0, 300); }
+    function normalizeCuts(cuts = state.cuts) {
+      if (!state.image) return [];
+      const min = 1, max = state.image.naturalHeight - 1;
+      return [...new Set(cuts.map((v) => clamp(Math.round(Number(v)), min, max)))].sort((a, b) => a - b);
+    }
+    function modules() {
+      if (!state.image) return [];
+      const overlap = cutOverlap(), halfBefore = Math.floor(overlap / 2), halfAfter = overlap - halfBefore;
+      const cuts = normalizeCuts(); const result = []; let top = 0;
+      cuts.forEach((cut, index) => { const bottom = clamp(cut + halfAfter, 1, state.image.naturalHeight); result.push({ index: index + 1, top, bottom }); top = clamp(cut - halfBefore, 0, state.image.naturalHeight - 1); });
+      result.push({ index: result.length + 1, top, bottom: state.image.naturalHeight });
+      return result.filter((m) => m.bottom > m.top);
+    }
+    function imageInfo() {
+      const w = state.image.naturalWidth, h = state.image.naturalHeight;
+      $('imageMeta').innerHTML = `<div class="meta-item"><span class="meta-label">文件</span><span class="meta-value">${escapeHtml(state.file.name)}</span></div><div class="meta-item"><span class="meta-label">原始分辨率</span><span class="meta-value">${w.toLocaleString()} × ${h.toLocaleString()} px</span></div>`;
+    }
+    function escapeHtml(value) { return String(value).replace(/[&<>'"]/g, (c) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' })[c]); }
+    function renderEditor() {
+      if (!state.image) return;
+      const autoScale = Math.min(900, Math.max(360, state.image.naturalWidth)) / state.image.naturalWidth;
+      state.previewScale = state.previewZoom === null ? autoScale : clamp(state.previewZoom / 100, .1, 1);
+      canvas.width = Math.round(state.image.naturalWidth * state.previewScale);
+      canvas.height = Math.round(state.image.naturalHeight * state.previewScale);
+      editorCtx.imageSmoothingEnabled = true;
+      editorCtx.drawImage(state.image, 0, 0, canvas.width, canvas.height);
+      const colors = ['rgba(35,103,242,.11)', 'rgba(42,172,115,.10)', 'rgba(249,145,33,.10)', 'rgba(160,90,240,.10)'];
+      modules().forEach((m, i) => { editorCtx.fillStyle = colors[i % colors.length]; editorCtx.fillRect(0, Math.round(m.top * state.previewScale), canvas.width, Math.round((m.bottom - m.top) * state.previewScale)); });
+      state.cuts.forEach((cut, i) => {
+        const y = Math.round(cut * state.previewScale);
+        editorCtx.strokeStyle = '#2367f2'; editorCtx.lineWidth = 2; editorCtx.setLineDash([7, 5]); editorCtx.beginPath(); editorCtx.moveTo(0, y); editorCtx.lineTo(canvas.width, y); editorCtx.stroke(); editorCtx.setLineDash([]);
+        editorCtx.fillStyle = '#2367f2'; editorCtx.fillRect(8, y - 13, 54, 21); editorCtx.fillStyle = '#fff'; editorCtx.font = 'bold 11px Microsoft YaHei'; editorCtx.fillText(`切点 ${i + 1}`, 14, y + 2);
+      });
+      const displayZoom = Math.round(state.previewScale * 100); previewZoom.value = displayZoom; previewZoomValue.value = displayZoom;
+      $('editorHint').textContent = `${state.previewZoom === null ? '自适应' : '手动'} · 原图 Y 坐标不变`;
+    }
+    function renderCuts() {
+      const list = $('cutList');
+      list.innerHTML = state.cuts.length ? '' : '<span style="color:#71809a;font-size:13px">尚未设置切点：可自动识别，或在上方预览图点击添加。</span>';
+      state.cuts.forEach((cut, index) => {
+        const chip = document.createElement('div'); chip.className = 'cut-chip';
+        chip.innerHTML = `切点 ${index + 1}：<input aria-label="切点 ${index + 1} 坐标" type="number" min="1" max="${state.image.naturalHeight - 1}" value="${cut}" /> px <button aria-label="删除切点 ${index + 1}" title="删除">×</button>`;
+        const input = chip.querySelector('input'); input.addEventListener('change', () => { state.cuts[index] = Number(input.value); refresh(); });
+        chip.querySelector('button').addEventListener('click', () => { state.cuts.splice(index, 1); refresh(); }); list.appendChild(chip);
+      });
+    }
+    function previewDataUrl(module) {
+      const preview = document.createElement('canvas'); const width = 480; const height = Math.max(1, Math.round((module.bottom - module.top) * width / state.image.naturalWidth));
+      preview.width = width; preview.height = Math.min(height, 900);
+      const visibleHeight = Math.min(module.bottom - module.top, Math.round(preview.height * state.image.naturalWidth / width));
+      preview.getContext('2d').drawImage(state.image, 0, module.top, state.image.naturalWidth, visibleHeight, 0, 0, width, preview.height);
+      return preview.toDataURL('image/png');
+    }
+    function renderModules() {
+      const current = modules(), grid = $('moduleGrid'); grid.innerHTML = '';
+      const w = state.image.naturalWidth;
+      $('moduleSummary').textContent = `共 ${current.length} 个模块 · 全部宽 ${w.toLocaleString()} px · 相邻模块重叠 ${cutOverlap()} px · 图片包格式 ${exportOptions().label}`;
+      $('downloadZip').disabled = !current.length;
+      $('downloadPdf').disabled = !current.length;
+      current.forEach((module) => {
+        const card = document.createElement('article'); card.className = 'module-card';
+        const img = document.createElement('img'); img.className = 'module-preview'; img.alt = `模块 ${module.index} 预览`; img.src = previewDataUrl(module); card.appendChild(img);
+        const info = document.createElement('div'); info.className = 'module-info';
+        info.innerHTML = `<div><strong>模块 ${String(module.index).padStart(2, '0')}</strong><small>Y ${module.top.toLocaleString()}–${module.bottom.toLocaleString()} · ${w.toLocaleString()} × ${(module.bottom - module.top).toLocaleString()} px</small></div>`;
+        const button = document.createElement('button'); button.className = 'btn btn-secondary'; button.textContent = `下载${exportOptions().label}`; button.addEventListener('click', () => downloadModule(module)); info.appendChild(button); card.appendChild(info); grid.appendChild(card);
+      });
+    }
+    function refresh() { state.cuts = normalizeCuts(); renderEditor(); renderCuts(); renderModules(); }
+    async function loadFile(file) {
+      if (!file || !file.type.startsWith('image/')) { setStatus('请选择有效的图片文件。', 'warn'); return; }
+      const url = URL.createObjectURL(file); const image = new Image(); image.decoding = 'async';
+      image.onload = () => { URL.revokeObjectURL(url); state.image = image; state.file = file; state.cuts = []; state.previewZoom = null; state.analysis = null; workspace.classList.add('ready'); imageInfo(); refresh(); setStatus('图片已载入。可先自动切分，再拖动蓝色切线做最后确认。'); };
+      image.onerror = () => { URL.revokeObjectURL(url); setStatus('这张图片无法读取，请换一张试试。', 'warn'); };
+      image.src = url;
+    }
+    function buildRowDensity() {
+      const w = state.image.naturalWidth, h = state.image.naturalHeight; const scanW = Math.min(900, w); const scale = scanW / w;
+      const scan = document.createElement('canvas'); scan.width = scanW; scan.height = h; const ctx = scan.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(state.image, 0, 0, scanW, h);
+      const data = ctx.getImageData(0, 0, scanW, h).data; const density = new Float32Array(h); const left = Math.floor(scanW * .10), right = Math.ceil(scanW * .88); const usable = right - left;
+      for (let y = 0; y < h; y++) { let ink = 0; const row = y * scanW * 4; for (let x = left; x < right; x++) { const p = row + x * 4; const r = data[p], g = data[p + 1], b = data[p + 2]; const max = Math.max(r,g,b), min = Math.min(r,g,b), light = (r + g + b) / 3; if (light < 232 || (max - min > 26 && light < 248)) ink++; } density[y] = ink / usable; }
+      const prefix = new Float64Array(h + 1); for (let i = 0; i < h; i++) prefix[i + 1] = prefix[i] + density[i]; const radius = Math.max(5, Math.round(10 / Math.max(scale, .18)));
+      const smooth = new Float32Array(h); for (let y = 0; y < h; y++) { const a = Math.max(0, y - radius), b = Math.min(h, y + radius + 1); smooth[y] = (prefix[b] - prefix[a]) / (b - a); }
+      return smooth;
+    }
+    function autoCuts() {
+      if (!state.image) return;
+      const target = clamp(Math.round(Number(targetInput.value) || 2000), 400, Math.max(400, state.image.naturalHeight));
+      setStatus('正在分析正文中的横向留白…');
+      setTimeout(() => {
+        const density = buildRowDensity(); const h = state.image.naturalHeight; const cuts = []; let current = 0;
+        while (h - current > target * 1.36) {
+          const ideal = current + target, low = Math.round(current + target * .62), high = Math.min(h - Math.round(target * .55), Math.round(current + target * 1.38));
+          let best = clamp(ideal, low, high), bestScore = Infinity;
+          for (let y = low; y <= high; y += 2) { const distance = Math.abs(y - ideal) / target; const score = density[y] * 8 + distance * .26; if (score < bestScore) { bestScore = score; best = y; } }
+          cuts.push(best); current = best;
+        }
+        state.cuts = normalizeCuts(cuts); state.analysis = density; refresh(); setStatus(`已生成 ${state.cuts.length} 个安全候选切点。请在预览中拖动蓝线，确认每条线都落在空白区域。`);
+      }, 30);
+    }
+    function addCut(y) { if (!state.image) return; state.cuts.push(clamp(Math.round(y), 1, state.image.naturalHeight - 1)); refresh(); }
+    function canvasY(event) { const rect = canvas.getBoundingClientRect(); return clamp((event.clientY - rect.top) * (canvas.height / rect.height) / state.previewScale, 1, state.image.naturalHeight - 1); }
+    canvas.addEventListener('pointerdown', (event) => { if (!state.image) return; const y = canvasY(event); const nearest = state.cuts.reduce((best, cut, index) => Math.abs(cut - y) < Math.abs(state.cuts[best] - y) ? index : best, 0); const hit = state.cuts.length && Math.abs(state.cuts[nearest] - y) <= 18 / state.previewScale; if (hit) { state.dragging = nearest; canvas.setPointerCapture(event.pointerId); } else { addCut(y); state.dragging = state.cuts.findIndex((cut) => cut === Math.round(y)); canvas.setPointerCapture(event.pointerId); } });
+    canvas.addEventListener('pointermove', (event) => { if (state.dragging < 0) return; state.cuts[state.dragging] = canvasY(event); refresh(); });
+    function stopDrag() { state.dragging = -1; } canvas.addEventListener('pointerup', stopDrag); canvas.addEventListener('pointercancel', stopDrag);
+    function exportOptions() { return { png: { mime:'image/png', extension:'png', label:'PNG', quality:undefined }, jpeg: { mime:'image/jpeg', extension:'jpg', label:'JPG', quality:.96 }, webp: { mime:'image/webp', extension:'webp', label:'WEBP', quality:.96 } }[exportFormat.value] || { mime:'image/png', extension:'png', label:'PNG', quality:undefined }; }
+    function cropBlob(module) { const format = exportOptions(); return new Promise((resolve, reject) => { const out = document.createElement('canvas'); out.width = state.image.naturalWidth; out.height = module.bottom - module.top; out.getContext('2d').drawImage(state.image, 0, module.top, out.width, out.height, 0, 0, out.width, out.height); out.toBlob((blob) => blob ? resolve(blob) : reject(new Error(`无法生成 ${format.label}`)), format.mime, format.quality); }); }
+    function moduleFileName(module) { return `${sourceBaseName()}_模块-${String(module.index).padStart(2, '0')}_Y${String(module.top).padStart(6, '0')}-${String(module.bottom).padStart(6, '0')}.${exportOptions().extension}`; }
+    function saveBlob(blob, filename) { const link = document.createElement('a'); link.href = URL.createObjectURL(blob); link.download = filename; document.body.appendChild(link); link.click(); link.remove(); setTimeout(() => URL.revokeObjectURL(link.href), 1500); }
+    async function downloadModule(module) { try { const format = exportOptions(); setStatus(`正在生成模块 ${module.index} 的 ${format.label}…`); saveBlob(await cropBlob(module), moduleFileName(module)); setStatus(`模块 ${module.index} 的 ${format.label} 已开始下载。`); } catch (error) { setStatus(error.message, 'warn'); } }
+    function crc32(bytes) { let crc = -1; for (const byte of bytes) { crc ^= byte; for (let i = 0; i < 8; i++) crc = (crc >>> 1) ^ (0xEDB88320 & -(crc & 1)); } return (crc ^ -1) >>> 0; }
+    function u16(value) { return Uint8Array.of(value & 255, (value >>> 8) & 255); }
+    function u32(value) { return Uint8Array.of(value & 255, (value >>> 8) & 255, (value >>> 16) & 255, (value >>> 24) & 255); }
+    function concat(parts) { const length = parts.reduce((sum, part) => sum + part.length, 0); const out = new Uint8Array(length); let offset = 0; parts.forEach((part) => { out.set(part, offset); offset += part.length; }); return out; }
+    function dosDate(date) { const year = Math.max(1980, date.getFullYear()); return { time: (date.getHours() << 11) | (date.getMinutes() << 5) | Math.floor(date.getSeconds() / 2), date: ((year - 1980) << 9) | ((date.getMonth() + 1) << 5) | date.getDate() }; }
+    function createZip(files) {
+      const encoder = new TextEncoder(), now = dosDate(new Date()), locals = [], central = []; let offset = 0;
+      files.forEach(({ name, data }) => { const nameBytes = encoder.encode(name), crc = crc32(data), local = concat([u32(0x04034b50),u16(20),u16(0x0800),u16(0),u16(now.time),u16(now.date),u32(crc),u32(data.length),u32(data.length),u16(nameBytes.length),u16(0),nameBytes,data]); locals.push(local); central.push(concat([u32(0x02014b50),u16(20),u16(20),u16(0x0800),u16(0),u16(now.time),u16(now.date),u32(crc),u32(data.length),u32(data.length),u16(nameBytes.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset),nameBytes])); offset += local.length; });
+      const centralBytes = concat(central); return new Blob([concat([...locals, centralBytes, u32(0x06054b50),u16(0),u16(0),u16(files.length),u16(files.length),u32(centralBytes.length),u32(offset),u16(0)])], { type: 'application/zip' });
+    }
+    async function canvasRgbBytes(module) {
+      const out = document.createElement('canvas'); out.width = state.image.naturalWidth; out.height = module.bottom - module.top;
+      const context = out.getContext('2d', { willReadFrequently: true }); context.drawImage(state.image, 0, module.top, out.width, out.height, 0, 0, out.width, out.height);
+      const rgba = context.getImageData(0, 0, out.width, out.height).data; const rgb = new Uint8Array(out.width * out.height * 3);
+      for (let source = 0, target = 0; source < rgba.length; source += 4) { const alpha = rgba[source + 3] / 255; rgb[target++] = Math.round(rgba[source] * alpha + 255 * (1 - alpha)); rgb[target++] = Math.round(rgba[source + 1] * alpha + 255 * (1 - alpha)); rgb[target++] = Math.round(rgba[source + 2] * alpha + 255 * (1 - alpha)); }
+      return rgb;
+    }
+    async function deflate(bytes) {
+      if (!('CompressionStream' in window)) return { bytes, compressed: false };
+      const stream = new Blob([bytes]).stream().pipeThrough(new CompressionStream('deflate'));
+      return { bytes: new Uint8Array(await new Response(stream).arrayBuffer()), compressed: true };
+    }
+    function pdfText(value) { return new TextEncoder().encode(value); }
+    async function createPdf(all) {
+      const objects = [null, null, null]; const pageIds = [];
+      const addObject = (head, data = null) => { objects.push({ head, data }); return objects.length - 1; };
+      for (const module of all) {
+        const width = state.image.naturalWidth, height = module.bottom - module.top, encoded = await deflate(await canvasRgbBytes(module));
+        const imageId = addObject(`<< /Type /XObject /Subtype /Image /Width ${width} /Height ${height} /ColorSpace /DeviceRGB /BitsPerComponent 8 ${encoded.compressed ? '/Filter /FlateDecode ' : ''}/Length ${encoded.bytes.length} >>`, encoded.bytes);
+        const content = pdfText(`q\n${width} 0 0 ${height} 0 0 cm\n/Im${module.index} Do\nQ\n`);
+        const contentId = addObject(`<< /Length ${content.length} >>`, content);
+        pageIds.push(addObject(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${width} ${height}] /Resources << /XObject << /Im${module.index} ${imageId} 0 R >> >> /Contents ${contentId} 0 R >>`));
+      }
+      objects[1] = { head: '<< /Type /Catalog /Pages 2 0 R >>', data: null };
+      objects[2] = { head: `<< /Type /Pages /Kids [${pageIds.map((id) => `${id} 0 R`).join(' ')}] /Count ${pageIds.length} >>`, data: null };
+      const header = pdfText('%PDF-1.7\n%\u00e2\u00e3\u00cf\u00d3\n'); const pieces = [header]; const offsets = [0]; let length = header.length;
+      for (let id = 1; id < objects.length; id++) { const object = objects[id]; offsets[id] = length; const start = pdfText(`${id} 0 obj\n${object.head}`); pieces.push(start); length += start.length; if (object.data) { const streamStart = pdfText('\nstream\n'), streamEnd = pdfText('\nendstream'); pieces.push(streamStart, object.data, streamEnd); length += streamStart.length + object.data.length + streamEnd.length; } const end = pdfText('\nendobj\n'); pieces.push(end); length += end.length; }
+      const xrefOffset = length; let xref = `xref\n0 ${objects.length}\n0000000000 65535 f \n`; for (let id = 1; id < objects.length; id++) xref += `${String(offsets[id]).padStart(10, '0')} 00000 n \n`; const trailer = `trailer\n<< /Size ${objects.length} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+      pieces.push(pdfText(xref + trailer)); return new Blob(pieces, { type: 'application/pdf' });
+    }
+    async function downloadZip() { try { const all = modules(), format = exportOptions(); $('downloadZip').disabled = true; setStatus(`正在生成 ${all.length} 张原像素 ${format.label} 并打包…`); const files = []; for (const module of all) { const bytes = new Uint8Array(await (await cropBlob(module)).arrayBuffer()); files.push({ name: moduleFileName(module), data: bytes }); }
+      const csv = ['模块,顶部Y,底部Y(不含),宽度,高度,重叠像素,导出格式', ...all.map((m) => `${m.index},${m.top},${m.bottom},${state.image.naturalWidth},${m.bottom - m.top},${cutOverlap()},${format.label}`)].join('\r\n'); files.push({ name: '切分清单.csv', data: new TextEncoder().encode('\uFEFF' + csv) }); saveBlob(createZip(files), `${sourceBaseName()}_${format.label}图片包.zip`); setStatus(`已打包 ${all.length} 张 ${format.label} 和切分清单，下载已开始。`); } catch (error) { setStatus(`打包失败：${error.message}`, 'warn'); } finally { $('downloadZip').disabled = false; } }
+    async function downloadPdf() { try { const all = modules(); $('downloadPdf').disabled = true; setStatus(`正在将 ${all.length} 个模块合成为原像素 PDF…`); saveBlob(await createPdf(all), `${sourceBaseName()}_无损分割合并.pdf`); setStatus(`已生成 ${all.length} 页 PDF，下载已开始。`); } catch (error) { setStatus(`PDF 生成失败：${error.message}`, 'warn'); } finally { $('downloadPdf').disabled = false; } }
+    fileInput.addEventListener('change', (event) => loadFile(event.target.files[0]));
+    dropZone.addEventListener('dragover', (event) => { event.preventDefault(); dropZone.classList.add('drag'); }); dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag')); dropZone.addEventListener('drop', (event) => { event.preventDefault(); dropZone.classList.remove('drag'); loadFile(event.dataTransfer.files[0]); }); dropZone.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') fileInput.click(); });
+    function setPreviewZoom(value) { if (!state.image) return; state.previewZoom = clamp(Math.round(Number(value) || 10), 10, 100); renderEditor(); }
+    $('autoCut').addEventListener('click', autoCuts); $('addCut').addEventListener('click', () => { const y = Number($('manualY').value); if (!y) { setStatus('请输入要添加的原图 Y 坐标。', 'warn'); return; } addCut(y); $('manualY').value = ''; setStatus('已添加切点，可在预览中继续拖动微调。'); }); $('clearCuts').addEventListener('click', () => { state.cuts = []; refresh(); setStatus('已清空切点，现在导出为完整原图。'); }); overlapInput.addEventListener('change', refresh); previewZoom.addEventListener('input', () => setPreviewZoom(previewZoom.value)); previewZoomValue.addEventListener('change', () => setPreviewZoom(previewZoomValue.value)); $('resetZoom').addEventListener('click', () => { state.previewZoom = null; renderEditor(); }); exportFormat.addEventListener('change', renderModules); $('downloadZip').addEventListener('click', downloadZip); $('downloadPdf').addEventListener('click', downloadPdf);
+  })();
+  </script>
+</body>
+</html>
