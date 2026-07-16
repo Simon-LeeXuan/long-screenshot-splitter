@@ -2,6 +2,10 @@
 
 English name: **Long Screenshot Splitter**
 
+## 在线使用
+
+[https://simon-leexuan.github.io/long-screenshot-splitter/](https://simon-leexuan.github.io/long-screenshot-splitter/)
+
 一个纯前端、可离线运行的长截图智能分割工具。图片仅在本地浏览器中处理，支持：
 
 - 自动识别空白区域并切分长截图
